@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Acreditación - ABASPAT
+  </title>
+
+
+  <!--
+    Lector QR
+  -->
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eef7f6,
+          #f7fbfb
+        );
+
+      color: #222;
+
+      padding: 20px;
+
+    }
+
+
+    .contenedor {
+
+      max-width: 850px;
+
+      margin: auto;
+
+    }
+
+
+    .encabezado {
+
+      text-align: center;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .encabezado img {
+
+      width: 200px;
+
+      max-width: 70%;
+
+    }
+
+
+    h1 {
+
+      margin: 12px 0 5px;
+
+      font-size: 30px;
+
+    }
+
+
+    .subtitulo {
+
+      color: #666;
+
+    }
+
+
+    .panel {
+
+      background: white;
+
+      border-radius: 20px;
+
+      padding: 25px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.08);
+
+    }
+
+
+    .puesto {
+
+      margin-bottom: 20px;
+
+    }
+
+
+    label {
+
+      display: block;
+
+      font-weight: bold;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    input {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border: 1px solid #ddd;
+
+      border-radius: 10px;
+
+      font-size: 17px;
+
+    }
+
+
+    .boton {
+
+      width: 100%;
+
+      border: 0;
+
+      border-radius: 12px;
+
+      padding: 15px;
+
+      margin-top: 12px;
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      background: #159a88;
+
+      color: white;
+
+    }
+
+
+    .boton-secundario {
+
+      background: #163f5f;
+
+    }
+
+
+    .boton-rojo {
+
+      background: #a92828;
+
+    }
+
+
+    #reader {
+
+      width: 100%;
+
+      max-width: 550px;
+
+      margin: 20px auto;
+
+    }
+
+
+    .resultado {
+
+      display: none;
+
+      text-align: center;
+
+      padding: 25px;
+
+      border-radius: 16px;
+
+      margin-top: 20px;
+
+    }
+
+
+    .resultado.exito {
+
+      background: #dff7f0;
+
+      border: 2px solid #159a88;
+
+      color: #116b5d;
+
+    }
+
+
+    .resultado.error {
+
+      background: #ffe5e5;
+
+      border: 2px solid #c62f2f;
+
+      color: #8c1717;
+
+    }
+
+
+    .resultado.duplicado {
+
+      background: #fff3d8;
+
+      border: 2px solid #d79519;
+
+      color: #855900;
+
+    }
+
+
+    .icono {
+
+      font-size: 48px;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .nombre {
+
+      font-size: 28px;
+
+      font-weight: bold;
+
+      margin: 10px 0;
+
+    }
+
+
+    .codigo {
+
+      font-size: 21px;
+
+      font-weight: bold;
+
+    }
+
+
+    .datos {
+
+      margin-top: 15px;
+
+      font-size: 14px;
+
+      line-height: 1.7;
+
+    }
+
+
+    .estadisticas {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 12px;
+
+      margin-top: 20px;
+
+    }
+
+
+    .stat {
+
+      background: #f5f7f7;
+
+      border-radius: 14px;
+
+      padding: 18px;
+
+      text-align: center;
+
+    }
+
+
+    .stat-numero {
+
+      display: block;
+
+      font-size: 30px;
+
+      font-weight: bold;
+
+    }
+
+
+    .stat-label {
+
+      display: block;
+
+      color: #777;
+
+      font-size: 13px;
+
+      margin-top: 5px;
+
+    }
+
+
+    .ayuda {
+
+      text-align: center;
+
+      color: #777;
+
+      font-size: 13px;
+
+      margin-top: 12px;
+
+    }
+
+
+    @media(max-width:600px) {
+
+      .panel {
+
+        padding: 18px;
+
+      }
+
+      h1 {
+
+        font-size: 25px;
+
+      }
+
+      .estadisticas {
+
+        grid-template-columns: 1fr;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+
+  <div class="encabezado">
+
+
+    <img
+      src="https://raw.githubusercontent.com/abaspat/homepage/main/logo_ajustado.png"
+      crossorigin="anonymous"
+      alt="ABASPAT"
+    >
+
+
+    <h1>
+      Acreditación
+    </h1>
+
+
+    <div class="subtitulo">
+      Control de ingreso al evento
+    </div>
+
+
+  </div>
+
+
+  <div class="panel">
+
+
+    <div class="puesto">
+
+      <label>
+        Puesto de recepción
+      </label>
+
+      <input
+        id="puesto"
+        type="text"
+        value="Recepción 1"
+      >
+
+    </div>
+
+
+    <div id="reader"></div>
+
+
+    <button
+      class="boton boton-rojo"
+      id="btnDetener"
+      onclick="detenerScanner()"
+      style="display:none"
+    >
+      DETENER CÁMARA
+    </button>
+
+
+    <button
+      class="boton"
+      id="btnIniciar"
+      onclick="iniciarScanner()"
+    >
+      📷 INICIAR ESCÁNER
+    </button>
+
+
+    <div class="ayuda">
+      Permití el acceso a la cámara cuando el navegador lo solicite.
+    </div>
+
+
+  </div>
+
+
+  <div class="panel">
+
+
+    <label>
+      Ingreso manual
+    </label>
+
+
+    <input
+      id="codigoManual"
+      type="text"
+      placeholder="ABASPAT-10.001"
+      autocomplete="off"
+    >
+
+
+    <button
+      class="boton boton-secundario"
+      onclick="acreditarManual()"
+    >
+      ACREDITAR CÓDIGO
+    </button>
+
+
+  </div>
+
+
+  <div
+    id="resultado"
+    class="resultado"
+  ></div>
+
+
+  <div class="panel">
+
+
+    <h2>
+      Estadísticas
+    </h2>
+
+
+    <div class="estadisticas">
+
+
+      <div class="stat">
+
+        <span
+          class="stat-numero"
+          id="total"
+        >
+          -
+        </span>
+
+        <span class="stat-label">
+          Registrados
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <span
+          class="stat-numero"
+          id="ingresaron"
+        >
+          -
+        </span>
+
+        <span class="stat-label">
+          Ingresaron
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <span
+          class="stat-numero"
+          id="pendientes"
+        >
+          -
+        </span>
+
+        <span class="stat-label">
+          Pendientes
+        </span>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<script>
+
+
+/*************************************************
+ * IMPORTANTE
+ *
+ * REEMPLAZÁ ESTA URL POR LA URL /exec DE TU
+ * GOOGLE APPS SCRIPT.
+ *************************************************/
+
+const API_URL =
+  "PEGAR_AQUI_URL_DE_GOOGLE_APPS_SCRIPT";
+
+
+let scanner = null;
+
+let scannerActivo = false;
+
+
+/*************************************************
+ * INICIAR SCANNER
+ *************************************************/
+
+async function iniciarScanner() {
+
+  if (scannerActivo) {
+
+    return;
+
+  }
+
+
+  try {
+
+    scanner =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    await scanner.start(
+
+      {
+        facingMode: "environment"
+      },
+
+      {
+        fps: 10,
+
+        qrbox: {
+          width: 280,
+          height: 280
+        }
+
+      },
+
+      function(decodedText) {
+
+        acreditar(
+          decodedText
+        );
+
+      },
+
+      function(errorMessage) {
+
+        // Ignorar errores normales
+        // de lectura cuadro por cuadro.
+
+      }
+
+    );
+
+
+    scannerActivo = true;
+
+
+    document
+      .getElementById(
+        "btnIniciar"
+      )
+      .style.display = "none";
+
+
+    document
+      .getElementById(
+        "btnDetener"
+      )
+      .style.display = "block";
+
+
+  } catch (error) {
+
+    mostrarResultado(
+
+      "error",
+
+      "⚠",
+
+      "No se pudo acceder a la cámara",
+
+      "Verificá que el navegador tenga permiso para utilizar la cámara. También podés acreditar ingresando el código manualmente."
+
+    );
+
+    console.error(error);
+
+  }
+
+}
+
+
+/*************************************************
+ * DETENER SCANNER
+ *************************************************/
+
+async function detenerScanner() {
+
+  if (
+    scanner &&
+    scannerActivo
+  ) {
+
+    try {
+
+      await scanner.stop();
+
+      scanner.clear();
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  scannerActivo = false;
+
+
+  document
+    .getElementById(
+      "btnIniciar"
+    )
+    .style.display = "block";
+
+
+  document
+    .getElementById(
+      "btnDetener"
+    )
+    .style.display = "none";
+
+}
+
+
+/*************************************************
+ * ACREDITAR MANUAL
+ *************************************************/
+
+function acreditarManual() {
+
+  const codigo =
+    document
+      .getElementById(
+        "codigoManual"
+      )
+      .value
+      .trim();
+
+
+  if (!codigo) {
+
+    mostrarResultado(
+
+      "error",
+
+      "⚠",
+
+      "Código vacío",
+
+      "Ingresá un código de acreditación."
+
+    );
+
+    return;
+
+  }
+
+
+  acreditar(codigo);
+
+}
+
+
+/*************************************************
+ * ACREDITAR
+ *************************************************/
+
+function acreditar(codigo) {
+
+  codigo =
+    String(codigo)
+      .trim()
+      .toUpperCase();
+
+
+  const puesto =
+    document
+      .getElementById(
+        "puesto"
+      )
+      .value
+      .trim() ||
+      "Recepción";
+
+
+  /*
+   * JSONP
+   *
+   * No usamos fetch() porque Apps Script
+   * puede bloquear la petición CORS.
+   */
+
+
+  const callbackName =
+    "abaspAtCallback_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(resultado) {
+
+      try {
+
+        mostrarResultadoDesdeAPI(
+          resultado
+        );
+
+      } finally {
+
+        delete window[
+          callbackName
+        ];
+
+        if (script.parentNode) {
+
+          script.parentNode
+            .removeChild(script);
+
+        }
+
+      }
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    API_URL +
+    "?accion=acreditar" +
+    "&codigo=" +
+    encodeURIComponent(
+      codigo
+    ) +
+    "&puesto=" +
+    encodeURIComponent(
+      puesto
+    ) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+      mostrarResultado(
+
+        "error",
+
+        "⚠",
+
+        "Error de conexión",
+
+        "No se pudo conectar con el sistema de acreditación."
+
+      );
+
+      delete window[
+        callbackName
+      ];
+
+    };
+
+
+  document
+    .body
+    .appendChild(script);
+
+}
+
+
+/*************************************************
+ * MOSTRAR RESULTADO
+ *************************************************/
+
+function mostrarResultadoDesdeAPI(
+  resultado
+) {
+
+
+  if (resultado.ok) {
+
+    mostrarResultado(
+
+      "exito",
+
+      "✓",
+
+      "INGRESO REGISTRADO",
+
+      resultado.nombre +
+      " " +
+      resultado.apellido,
+
+      resultado.codigo
+
+    );
+
+
+    document
+      .getElementById(
+        "codigoManual"
+      )
+      .value = "";
+
+
+    actualizarEstadisticas();
+
+
+    return;
+
+  }
+
+
+  if (resultado.duplicado) {
+
+    mostrarResultado(
+
+      "duplicado",
+
+      "⚠",
+
+      "YA INGRESÓ",
+
+      resultado.nombre +
+      " " +
+      resultado.apellido,
+
+      resultado.codigo,
+
+      resultado.fechaIngreso,
+      resultado.puesto
+
+    );
+
+
+    return;
+
+  }
+
+
+  mostrarResultado(
+
+    "error",
+
+    "✕",
+
+    "NO ACREDITADO",
+
+    resultado.mensaje || "Código no encontrado."
+
+  );
+
+}
+
+
+/*************************************************
+ * RESULTADO VISUAL
+ *************************************************/
+
+function mostrarResultado(
+  tipo,
+  icono,
+  titulo,
+  texto,
+  codigo,
+  fecha,
+  puesto
+) {
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  let html = `
+
+    <div class="icono">
+      ${icono}
+    </div>
+
+    <div>
+      ${titulo}
+    </div>
+
+    <div class="nombre">
+      ${texto}
+    </div>
+
+  `;
+
+
+  if (codigo) {
+
+    html += `
+
+      <div class="codigo">
+        ${codigo}
+      </div>
+
+    `;
+
+  }
+
+
+  if (fecha) {
+
+    html += `
+
+      <div class="datos">
+
+        Fecha:
+        ${new Date(fecha).toLocaleString("es-AR")}
+
+        <br>
+
+        Puesto:
+        ${puesto || ""}
+
+      </div>
+
+    `;
+
+  }
+
+
+  resultado.innerHTML =
+    html;
+
+
+  resultado.className =
+    "resultado " +
+    tipo;
+
+
+  resultado.style.display =
+    "block";
+
+
+  /*
+   * Ocultar automáticamente
+   * después de unos segundos
+   */
+
+  clearTimeout(
+    window.resultadoTimer
+  );
+
+
+  window.resultadoTimer =
+    setTimeout(
+      function() {
+
+        resultado.style.display =
+          "none";
+
+      },
+      5000
+    );
+
+}
+
+
+/*************************************************
+ * ESTADÍSTICAS
+ *************************************************/
+
+function actualizarEstadisticas() {
+
+  const callbackName =
+    "statsCallback_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(resultado) {
+
+      if (resultado.ok) {
+
+        document
+          .getElementById("total")
+          .textContent =
+          resultado.total;
+
+
+        document
+          .getElementById("ingresaron")
+          .textContent =
+          resultado.ingresaron;
+
+
+        document
+          .getElementById("pendientes")
+          .textContent =
+          resultado.pendientes;
+
+      }
+
+
+      delete window[
+        callbackName
+      ];
+
+      if (script.parentNode) {
+
+        script.parentNode
+          .removeChild(script);
+
+      }
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    API_URL +
+    "?accion=estadisticas" +
+    "&callback=" +
+    callbackName;
+
+
+  document
+    .body
+    .appendChild(script);
+
+}
+
+
+/*************************************************
+ * ESTADÍSTICAS CADA 5 SEGUNDOS
+ *************************************************/
+
+actualizarEstadisticas();
+
+
+setInterval(
+  actualizarEstadisticas,
+  5000
+);
+
+
+/*************************************************
+ * ENTER EN CÓDIGO MANUAL
+ *************************************************/
+
+document
+  .getElementById(
+    "codigoManual"
+  )
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        acreditarManual();
+
+      }
+
+    }
+  );
+
+</script>
+
+
+</body>
+
+</html>
